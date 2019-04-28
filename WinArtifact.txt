@@ -1,14 +1,38 @@
-Regarding the qt5 Windows artifact, RcloneBrowser.exe requires:
+Regarding the Qt5 Windows artifact, RcloneBrowser.exe requires:
 Qt5Core.dll
 Qt5Gui.dll
 Qt5Widgets.dll
 Qt5WinExtras.dll
 qwindows.dll
 
-Typically, Qt shared libraries are distributed with the executable.  .appveyor.yml details a 64-bit VS12 build against msvc2013 Qt5.8 which would be:
-https://download.qt.io/archive/qt/5.8/5.8.0/qt-opensource-windows-x86-msvc2013_64-5.8.0.exe
+Typically, Qt shared libraries are distributed with the executable.  
 
-Download Qt5.8 and, using 7-zip file manager, right-click and "Open Inside #"  A numbered list of files and headers are shown.  We need 12.7z and 50.7z:
+The current .appveyor.yml details a 64-bit VS14 build against msvc2015 Qt5.12.2.  Using the latest Qt5.12.3, that would be:
+https://download.qt.io/archive/qt/5.12/5.12.3/qt-opensource-windows-x86-5.12.3.exe
+
+Download Qt5.12.3 and, using 7-zip file manager, right-click and "Open Inside #"  A numbered list of files and headers are shown.  We need 830.7z and 876.7z:
+
+830.7z\5.12.3\msvc2015_64\bin:
+Qt5Core.dll
+Qt5Gui.dll
+Qt5Widgets.dll
+
+830.7z\5.12.3\msvc2015_64\plugins\platforms:
+qwindows.dll
+
+876.7z\5.12.3\msvc2015_64\bin:
+Qt5WinExtras.dll
+
+Select the files noted and extract them to the folder containing RcloneBrowser.  Create a shortcut to the .exe with "Target":
+
+cmd.exe /c "SET QT_QPA_PLATFORM_PLUGIN_PATH=. && START /D ^".^" RcloneBrowser.exe"
+
+This will prepare the QT environment appropriately for RcloneBrowser without affecting other Qt installations.  A global install of Qt may break the program so I recommend avoiding that.
+
+
+
+The original .appveyor.yml details a 64-bit VS12 build against msvc2013 Qt5.8 which would be:
+https://download.qt.io/archive/qt/5.8/5.8.0/qt-opensource-windows-x86-msvc2013_64-5.8.0.exe
 
 12.7z\5.8\msvc2013_64\bin:
 Qt5Core.dll
@@ -22,8 +46,7 @@ qwindows.dll
 Qt5WinExtras.dll
 
 
-The same can be found in a slightly newer version within 72.7z and 112.7z:
-
+For Qt5.9.8:
 https://download.qt.io/archive/qt/5.9/5.9.8/qt-opensource-windows-x86-5.9.8.exe
 
 72.7z\5.9.8\msvc2013_64\bin:
@@ -36,10 +59,3 @@ qwindows.dll
 
 112.7z\5.9.8\msvc2013_64\bin:
 Qt5WinExtras.dll
-
-
-Select the files noted and extract them to the folder containing RcloneBrowser.  Create a shortcut to the .exe with "Target":
-
-cmd.exe /c "SET QT_QPA_PLATFORM_PLUGIN_PATH=. && START /D ^".^" RcloneBrowser.exe"
-
-This will prepare the QT environment appropriately for RcloneBrowser without affecting other Qt installations.  A global install of Qt may break the program so I recommend avoiding that.
